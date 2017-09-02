@@ -7,6 +7,7 @@ namespace Investips.Core.Models
 {
     public class WidgetShape
     {
+        public int Id { get; set; }
         public WidgetShapePoint ShapePoint { get; set; }
         public ShapeDefinition ShapeDefinition { get; set; }
     }

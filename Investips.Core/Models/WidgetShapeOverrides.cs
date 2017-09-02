@@ -6,6 +6,7 @@ namespace Investips.Core.Models
 {
     public class WidgetShapeOverrides
     {
+        public int Id { get; set; }
         public bool ShowLabel { get; set; }
         public int FontSize { get; set; }
         public int LineWidth { get; set; }

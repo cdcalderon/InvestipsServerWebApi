@@ -6,6 +6,7 @@ namespace Investips.Core.Models
 {
     public class ShapeDefinition
     {
+        public int Id { get; set; }
         public string Shape { get; set; }
         public bool Lock { get; set; }
         public bool DisableSelection { get; set; }
