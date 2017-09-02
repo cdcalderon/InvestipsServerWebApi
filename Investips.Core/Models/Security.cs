@@ -16,7 +16,7 @@ namespace Investips.Core.Models
         public string Symbol { get; set; }
 
         public Collection<WidgetShape> WidgetShapes { get; set; }
-
+        public Collection<WidgetMultipointShape> WidgetMultipointShapes { get; set; }
 
     }
 }
