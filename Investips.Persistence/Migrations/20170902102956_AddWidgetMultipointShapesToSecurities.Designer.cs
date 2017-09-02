@@ -11,9 +11,10 @@ using System;
 namespace Investips.Persistence.Migrations
 {
     [DbContext(typeof(InvestipsDbContext))]
-    partial class InvestipsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170902102956_AddWidgetMultipointShapesToSecurities")]
+    partial class AddWidgetMultipointShapesToSecurities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,19 +65,6 @@ namespace Investips.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Securities");
-                });
-
-            modelBuilder.Entity("Investips.Core.Models.SecurityWidgetMultipointShape", b =>
-                {
-                    b.Property<int>("SecurityId");
-
-                    b.Property<int>("WidgetMultipointShapeId");
-
-                    b.HasKey("SecurityId", "WidgetMultipointShapeId");
-
-                    b.HasIndex("WidgetMultipointShapeId");
-
-                    b.ToTable("SecurityWidgetMultipointShape");
                 });
 
             modelBuilder.Entity("Investips.Core.Models.SecurityWidgetShape", b =>
@@ -206,19 +194,6 @@ namespace Investips.Persistence.Migrations
                     b.HasOne("Investips.Core.Models.Security", "Security")
                         .WithMany()
                         .HasForeignKey("SecurityId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Investips.Core.Models.SecurityWidgetMultipointShape", b =>
-                {
-                    b.HasOne("Investips.Core.Models.Security", "Security")
-                        .WithMany()
-                        .HasForeignKey("SecurityId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Investips.Core.Models.WidgetMultipointShape", "WidgetMultipointShape")
-                        .WithMany()
-                        .HasForeignKey("WidgetMultipointShapeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

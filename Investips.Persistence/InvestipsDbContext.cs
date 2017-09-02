@@ -23,6 +23,10 @@ namespace Investips.Persistence
 
             modelBulder.Entity<SecurityWidgetShape>().HasKey(sw =>
                 new { sw.SecurityId, sw.WidgetShapeId});
+
+            modelBulder.Entity<SecurityWidgetMultipointShape>().HasKey(swmp =>
+                new { swmp.SecurityId, swmp.WidgetMultipointShapeId });
+
         }
     }
 }
