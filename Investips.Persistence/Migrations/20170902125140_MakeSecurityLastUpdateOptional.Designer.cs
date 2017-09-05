@@ -11,9 +11,10 @@ using System;
 namespace Investips.Persistence.Migrations
 {
     [DbContext(typeof(InvestipsDbContext))]
-    partial class InvestipsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170902125140_MakeSecurityLastUpdateOptional")]
+    partial class MakeSecurityLastUpdateOptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

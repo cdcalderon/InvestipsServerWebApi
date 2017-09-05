@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Investips.Core.Models
@@ -14,6 +15,7 @@ namespace Investips.Core.Models
         [Required]
         [StringLength(25)]
         public string Symbol { get; set; }
+        public DateTime? LastUpdate { get; set; }
 
         public Collection<WidgetShape> WidgetShapes { get; set; }
         public Collection<WidgetMultipointShape> WidgetMultipointShapes { get; set; }

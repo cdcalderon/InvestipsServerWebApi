@@ -57,5 +57,28 @@ namespace InvestipsApi.Controllers
             var result = _mapper.Map<Security, SecurityResource>(security);
             return Ok(result);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSecurity(int id, [FromBody] SaveSecurityResource securityResource)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var security = await _securityRepository.GetSecurity(id);
+
+            if (security == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map<SaveSecurityResource, Security>(securityResource, security);
+            security.LastUpdate = DateTime.Now;
+
+            await _uow.CompleteAsync();
+            security = await _securityRepository.GetSecurity(security.Id);
+            var result = _mapper.Map<Security, SecurityResource>(security);
+            return Ok(result);
+        }
     }
 }
