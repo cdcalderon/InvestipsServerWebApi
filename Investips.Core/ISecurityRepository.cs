@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Investips.Core.Models;
 
 namespace Investips.Core
@@ -7,5 +8,7 @@ namespace Investips.Core
     {
         Task<Security> GetSecurity(int id);
         void Add(Security security);
+        Task<List<Security>> GetSecurities();
+        Task<Security> GetSecurityWithStudies(int id);
     }
 }

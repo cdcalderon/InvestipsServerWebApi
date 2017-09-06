@@ -10,6 +10,7 @@ namespace Investips.Core.Models
         public Security()
         {
             WidgetShapes = new Collection<SecurityWidgetShape>();
+            WidgetMultipointShapes = new List<SecurityWidgetMultipointShape>();
         }
         public int Id { get; set; }
 
@@ -19,7 +20,7 @@ namespace Investips.Core.Models
         public DateTime? LastUpdate { get; set; }
 
         public ICollection<SecurityWidgetShape> WidgetShapes { get; set; }
-        public Collection<WidgetMultipointShape> WidgetMultipointShapes { get; set; }
+        public ICollection<SecurityWidgetMultipointShape> WidgetMultipointShapes { get; set; }
 
     }
 }

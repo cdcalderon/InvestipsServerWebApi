@@ -10,5 +10,8 @@ namespace Investips.Core.Models
         public int Id { get; set; }
         public WidgetShapePoint ShapePoint { get; set; }
         public ShapeDefinition ShapeDefinition { get; set; }
+
+        public Security Security { get; set; }
+        public int SecurityId { get; set; }
     }
 }
