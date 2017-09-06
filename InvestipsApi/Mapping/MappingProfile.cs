@@ -51,13 +51,15 @@ namespace InvestipsApi.Mapping
 
 
             CreateMap<Security, SecurityResource>().ReverseMap();
-            //CreateMap<SecurityResource, Security>();
-            CreateMap<SaveSecurityResource, Security>().ReverseMap();
+            CreateMap<SaveSecurityResource, Security>()
+                .ForMember(s => s.Id, opt => opt.Ignore())
+                .ForMember(s => s.WidgetShapes, opt => opt.MapFrom(sec => sec.WidgetShapes
+                .Select(w => new SecurityWidgetShape{ WidgetShape = w})));
 
-            // CreateMap<PorfolioResource, Porfolio>()
-            // .ForMember(p => p.Id, opt => opt.Ignore())
-            // .ForMember(p => p.Securities, opt => opt.MapFrom(pr => pr.Securities
-            // .Select(id => new PorfolioSecurity{ SecurityId = id })));
+            //CreateMap<PortfolioResource, Portfolio>()
+            //.ForMember(p => p.Id, opt => opt.Ignore())
+            //.ForMember(p => p.Securities, opt => opt.MapFrom(pr => pr.Securities
+            //.Select(id => new PortfolioSecurity { SecurityId = id })));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -61,24 +62,33 @@ namespace InvestipsApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSecurity(int id, [FromBody] SaveSecurityResource securityResource)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
-            var security = await _securityRepository.GetSecurity(id);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var security = await _securityRepository.GetSecurity(id);
 
-            if (security == null)
+                if (security == null)
+                {
+                    return NotFound();
+                }
+
+                _mapper.Map<SaveSecurityResource, Security>(securityResource, security);
+                security.LastUpdate = DateTime.Now;
+
+                await _uow.CompleteAsync();
+                security = await _securityRepository.GetSecurity(security.Id);
+                var result = _mapper.Map<Security, SecurityResource>(security);
+                return Ok(result);
+            }
+            catch (Exception e)
             {
-                return NotFound();
+                Debug.WriteLine(e);
+                throw;
             }
-
-            _mapper.Map<SaveSecurityResource, Security>(securityResource, security);
-            security.LastUpdate = DateTime.Now;
-
-            await _uow.CompleteAsync();
-            security = await _securityRepository.GetSecurity(security.Id);
-            var result = _mapper.Map<Security, SecurityResource>(security);
-            return Ok(result);
+            
         }
     }
 }

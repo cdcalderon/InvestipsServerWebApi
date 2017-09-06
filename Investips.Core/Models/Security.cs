@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,7 +9,7 @@ namespace Investips.Core.Models
     {
         public Security()
         {
-            WidgetShapes = new Collection<WidgetShape>();
+            WidgetShapes = new Collection<SecurityWidgetShape>();
         }
         public int Id { get; set; }
 
@@ -17,7 +18,7 @@ namespace Investips.Core.Models
         public string Symbol { get; set; }
         public DateTime? LastUpdate { get; set; }
 
-        public Collection<WidgetShape> WidgetShapes { get; set; }
+        public ICollection<SecurityWidgetShape> WidgetShapes { get; set; }
         public Collection<WidgetMultipointShape> WidgetMultipointShapes { get; set; }
 
     }
