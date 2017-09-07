@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
+using System.Xml;
 using AutoMapper;
 using Investips.Core.Models;
 using InvestipsApi.Controllers.Resources;
@@ -54,31 +55,25 @@ namespace InvestipsApi.Mapping
             
             CreateMap<Security, SecurityResource>().ReverseMap();
             CreateMap<SaveSecurityResource, Security>()
-                .ForMember(s => s.Id, opt => opt.Ignore())
-                .ForMember(s => s.WidgetShapes, opt => opt.MapFrom(sec => sec.WidgetShapes
-                .Select(w => new SecurityWidgetShape{ WidgetShape = w})))
-                .ForMember(s => s.WidgetMultipointShapes, opt => opt.MapFrom(sec => sec.WidgetMultipointShapes
-                .Select(w => new SecurityWidgetMultipointShape() { WidgetMultipointShape = w })));
+                .ForMember(s => s.Id, opt => opt.Ignore());
 
-            CreateMap<Security, WidgetShapesResource>()
-                .ForMember(wsr => wsr.SinglePointShapes, opt => opt.MapFrom(s => s.WidgetShapes
-                    .Select(x => new ShapeResource()
-                    {
-                        ShapePoint = x.WidgetShape.ShapePoint,
-                        ShapeType = x.WidgetShape.ShapeDefinition.Shape
-                    })))
-               .ForMember(wsr => wsr.MultipointShapes, opt => opt.MapFrom(s => s.WidgetMultipointShapes
-                .Select(x => new MultipointShapeResource
+
+            CreateMap<Security, SecurityWidgetResource>();
+
+            CreateMap<WidgetShape, WidgetShapeResource>()
+                .ForMember(wr => wr.ShapePoints, opt => opt.MapFrom(w => w.WidgetShapePoints
+                .Select(ws => new WidgetShapePointResource
                 {
-                    ShapePoints = x.WidgetMultipointShape.WidgetShapePoints,
-                    ShapeType = x.WidgetMultipointShape.ShapeDefinition.Shape
+                    Time = ws.Time,
+                    Price = ws.Price
                 })));
 
+            CreateMap<WidgetShapePoint, WidgetShapePointResource>().ReverseMap();
 
 
 
-            //CreateMap<SecurityWidgetShape, ShapeResource>()
-            //    .ForMember(sr => sr, opt => opt.MapFrom(ws => new ShapeResource
+            //CreateMap<SecurityWidgetShape, WidgetShapeResource>()
+            //    .ForMember(sr => sr, opt => opt.MapFrom(ws => new WidgetShapeResource
             //    {
             //       ShapePoint = ws.WidgetShape.ShapePoint,
             //       ShapeType = ws.WidgetShape.ShapeDefinition.Shape

@@ -7,7 +7,6 @@ namespace Investips.Persistence
     {
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<Security> Securities { get; set; }
-        public DbSet<WidgetMultipointShape> WidgetMultipointShapes { get; set; }
         public DbSet<WidgetShape> WidgetShapes { get; set; }
         public InvestipsDbContext(DbContextOptions<InvestipsDbContext> options)
             : base((DbContextOptions) (DbContextOptions) options)
@@ -20,12 +19,6 @@ namespace Investips.Persistence
         {
             modelBulder.Entity<PortfolioSecurity>().HasKey(ps =>
                 new { ps.PortfolioId, ps.SecurityId });
-
-            modelBulder.Entity<SecurityWidgetShape>().HasKey(sw =>
-                new { sw.SecurityId, sw.WidgetShapeId});
-
-            modelBulder.Entity<SecurityWidgetMultipointShape>().HasKey(swmp =>
-                new { swmp.SecurityId, swmp.WidgetMultipointShapeId });
 
         }
     }

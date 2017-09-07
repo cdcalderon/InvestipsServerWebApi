@@ -17,10 +17,6 @@ namespace Investips.Persistence
         public async Task<List<Security>> GetSecurities()
         {
             return await context.Securities
-                .Include(s => s.WidgetShapes).ThenInclude(s => s.WidgetShape.ShapePoint)
-                .Include(s => s.WidgetShapes).ThenInclude(s => s.WidgetShape.ShapeDefinition)
-                .Include(s => s.WidgetMultipointShapes).ThenInclude(s => s.WidgetMultipointShape.WidgetShapePoints)
-                .Include(s => s.WidgetMultipointShapes).ThenInclude(s => s.WidgetMultipointShape.ShapeDefinition)
                 .ToListAsync();
         }
 
@@ -37,8 +33,7 @@ namespace Investips.Persistence
         public async Task<Security> GetSecurityWithStudies(int id)
         {
             return await context.Securities
-                .Include(s => s.WidgetShapes)
-                .Include(s => s.WidgetMultipointShapes)
+                .Include(s => s.WidgetShapes).ThenInclude(w => w.WidgetShapePoints)
                 .SingleOrDefaultAsync(s => s.Id == id);
         }
     }

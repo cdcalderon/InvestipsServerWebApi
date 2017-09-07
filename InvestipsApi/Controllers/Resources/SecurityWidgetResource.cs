@@ -7,11 +7,13 @@ using Investips.Core.Models;
 
 namespace InvestipsApi.Controllers.Resources
 {
-    public class SaveSecurityResource
+    public class SecurityWidgetResource
     {
-        public int Id { get; set; }
+        public SecurityWidgetResource()
+        {
+            WidgetShapes = new Collection<WidgetShapeResource>();
+        }
         public string Symbol { get; set; }
-
-        public Collection<WidgetShape> WidgetShapes { get; set; }
+        public Collection<WidgetShapeResource> WidgetShapes { get; set; }
     }
 }
