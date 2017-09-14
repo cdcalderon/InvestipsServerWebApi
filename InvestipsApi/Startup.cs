@@ -37,6 +37,7 @@ namespace InvestipsApi
         {
             services.AddScoped<IPortfolioRepository, PortfolioRepository>();
             services.AddScoped<ISecurityRepository, SecurityRepository>();
+            services.AddScoped<IChartRepository, ChartRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper();
             services.AddDbContext<InvestipsDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
