@@ -62,7 +62,7 @@ namespace InvestipsApi.Controllers
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                Debug.WriteLine(e.Message);
                 throw;
             }
             
