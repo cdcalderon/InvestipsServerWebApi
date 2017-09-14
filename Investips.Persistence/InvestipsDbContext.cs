@@ -8,6 +8,8 @@ namespace Investips.Persistence
         public DbSet<Portfolio> Portfolios { get; set; }
         public DbSet<Security> Securities { get; set; }
         public DbSet<WidgetShape> WidgetShapes { get; set; }
+        public DbSet<Chart> Charts { get; set; }
+
         public InvestipsDbContext(DbContextOptions<InvestipsDbContext> options)
             : base((DbContextOptions) (DbContextOptions) options)
         {

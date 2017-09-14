@@ -7,6 +7,8 @@ using Investips.Core;
 using Investips.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +43,18 @@ namespace InvestipsApi
 
             // Add framework services.
             services.AddMvc();
+
+            services.AddCors(o => o.AddPolicy("InvestipsPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("InvestipsPolicy"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,8 +68,8 @@ namespace InvestipsApi
 
             //using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             //{
-            //    var context = serviceScope.ServiceProvider.GetRequiredService<InvestipsDbContext>();
-            //    context.Database.Migrate();
+            //   var context = serviceScope.ServiceProvider.GetRequiredService<InvestipsDbContext>();
+            //   context.Database.Migrate();
             //}
 
             app.UseMvc();
