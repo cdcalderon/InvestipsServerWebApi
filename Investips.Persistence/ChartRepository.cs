@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Investips.Core;
 using Investips.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Investips.Persistence
 {
@@ -17,6 +18,9 @@ namespace Investips.Persistence
             _context = context;
         }
         
+        public Task<List<Chart>> GetCharts() {
+            return _context.Charts.ToListAsync();
+        }
         public void Add(Chart chart)
         {
             _context.Charts.Add(chart);

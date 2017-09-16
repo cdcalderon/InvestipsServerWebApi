@@ -8,6 +8,7 @@ namespace Investips.Core
 {
     public interface IChartRepository
     {
+        Task<List<Chart>> GetCharts();
         void Add(Chart chart);
         Task<Chart> GetChart(int id);
     }

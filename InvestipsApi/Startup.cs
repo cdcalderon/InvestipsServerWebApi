@@ -67,11 +67,11 @@ namespace InvestipsApi
             }
 
 
-            //using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            //{
+            // using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            // {
             //   var context = serviceScope.ServiceProvider.GetRequiredService<InvestipsDbContext>();
             //   context.Database.Migrate();
-            //}
+            // }
 
             app.UseMvc();
         }
