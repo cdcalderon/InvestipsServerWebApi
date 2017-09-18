@@ -69,7 +69,11 @@ namespace InvestipsApi.Mapping
                 })));
 
             CreateMap<WidgetShapePoint, WidgetShapePointResource>().ReverseMap();
-            CreateMap<Chart, ChartResource>().ReverseMap();
+            CreateMap<Chart, ChartResource>();
+
+            CreateMap<ChartResource, Chart>()
+                .ForMember(s => s.Id, opt => opt.Ignore());
+
 
 
             //CreateMap<SecurityWidgetShape, WidgetShapeResource>()

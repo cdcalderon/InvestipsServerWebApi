@@ -145,6 +145,7 @@ namespace InvestipsApi.Controllers
                     }).ToDictionary(x => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(x.Prop.ToLower()), x => x.Value);
 
                 var chartResource = dic.DictionaryToObject<ChartResource>();
+                
                 // if (!ModelState.IsValid)
                 // {
                 //     return BadRequest(ModelState);
