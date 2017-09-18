@@ -107,16 +107,20 @@ namespace InvestipsApi.Controllers
             
             try
             {
-
+                int chart = 0;
+                string chartStr = "";
                 var bodyStr = "";
                 var req = HttpContext.Request;
                 var queryStrings = Request.Query;
                  var qsList = new List<string>();
+
                 foreach(var key in queryStrings.Keys)
                 {
+                    if(key == "chart"){
+                        chart = Int32.Parse(queryStrings[key]);
+                    }
                     qsList.Add(queryStrings[key]);
                 }
-                int chart = 1;
 
                 // Allows using several time the stream in ASP.Net Core
                 req.EnableRewind();
@@ -133,7 +137,7 @@ namespace InvestipsApi.Controllers
                 req.Body.Position = 0;
 
 
-                if(string.IsNullOrEmpty(bodyStr)){
+                if(!string.IsNullOrEmpty(bodyStr)){
                     var dic = bodyStr.Split('&').Select(x => x.Split('=')).Select(t =>
                     new {
                         Prop = t[0],
@@ -146,10 +150,10 @@ namespace InvestipsApi.Controllers
                 //     return BadRequest(ModelState);
                 // }
 
-                if(chart > 1) {
+                if(chart > 0) {
                     var chartE = await _chartRepository.GetChart(chart);
 
-                    if(chartE != null) {
+                    if(chartE == null) {
                         return NotFound();
                     }
 
