@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Investips.Core.Extensions;
+using InvestipsApi.Helpers;
 
 namespace InvestipsApi.Controllers
 {
@@ -34,58 +35,48 @@ namespace InvestipsApi.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetCharts(string client, string user, int chart) {
+        public async Task<IActionResult> GetCharts(string client, string user, int chart)
+        {
 
-            if(chart > 0) {
-                var chartObject = await _chartRepository.GetChart(chart);
-            if (chartObject == null)
+            if (chart > 0)
             {
-                return NotFound();
+                var chartObject = await _chartRepository.GetChart(chart);
+                if (chartObject == null)
+                {
+                    return NotFound();
+                }
+
+                var chartResource = _mapper.Map<Chart, ChartResource>(chartObject);
+                var data = new
+                {
+                    status = "ok",
+                    data = new
+                    {
+                        content = System.Net.WebUtility.UrlDecode(chartResource.Content),
+                        name = chartResource.Name,
+                        id = chartResource.Id
+                    }
+                };
+
+                return Json(data);
             }
+            else
+            {
+                var charts = await _chartRepository.GetCharts();
+                var result = _mapper.Map<List<Chart>, List<ChartResource>>(charts);
 
-            var chartResource =_mapper.Map<Chart, ChartResource>(chartObject);
+                var dataContent = result.Select(x => new
+                {
+                    timestamp = 1505119125.0,
+                    symbol = x.Symbol,
+                    resolution = "D",
+                    id = x.Id,
+                    name = x.Name
+                });
+                var data = new {status = "ok", data = dataContent};
 
-            System.Net.WebUtility.UrlDecode("");
-
-            var data = new { status = "ok", data = new {
-                content = System.Net.WebUtility.UrlDecode(chartResource.Content),
-                name = chartResource.Name,
-                id = chartResource.Id
-            }};
-
-            return Json(data);
-
-            //return Ok(chartResource);
-
-            } else {
-            var charts = await _chartRepository.GetCharts();
-            var result = _mapper.Map<List<Chart>, List<ChartResource>>(charts);
-
-            var dataContent = result.Select(x => new {
-                timestamp = 1505119125.0,
-            symbol = x.Symbol,
-            resolution= "D",
-            id= x.Id,
-            name = x.Name
-            });
-            var data = new { status = "ok", data = dataContent };
-
-             return Json(data);
+                return Json(data);
             }
-            
-
-        // var dataContent = new List<object>() {new {
-        //     timestamp = 1505119125.0,
-        //     symbol = "AAPL",
-        //     resolution= "D",
-        //     id= 66535,
-        //     name = "AAPL Fib Extension"
-        // }};
-        // var data = new { status = "ok", data = dataContent };
-
-        // return Json(data);
-
-            //return Ok(res);
         }
 
         [HttpGet("{id}")]
@@ -104,94 +95,74 @@ namespace InvestipsApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateChart()
         {
-            
             try
             {
                 int chart = 0;
-                string chartStr = "";
-                var bodyStr = "";
-                var req = HttpContext.Request;
-                var queryStrings = Request.Query;
-                 var qsList = new List<string>();
+                IQueryCollection queryStrings;
+                var bodyStr = GetBodyStr(out queryStrings);
+                chart = QueryStringHelper.GetChartId(queryStrings);
 
-                foreach(var key in queryStrings.Keys)
+                if (!string.IsNullOrEmpty(bodyStr))
                 {
-                    if(key == "chart"){
-                        chart = Int32.Parse(queryStrings[key]);
-                    }
-                    qsList.Add(queryStrings[key]);
-                }
+                    var chartResource = QueryStringHelper.GetChartResource(bodyStr);
+                    if (chart > 0)
+                    {
+                        var chartE = await _chartRepository.GetChart(chart);
 
-                // Allows using several time the stream in ASP.Net Core
-                req.EnableRewind();
-
-                // Arguments: Stream, Encoding, detect encoding, buffer size 
-                // AND, the most important: keep stream opened
-                using (StreamReader reader
-                    = new StreamReader(req.Body, Encoding.UTF8, true, 1024, true))
-                {
-                    bodyStr = reader.ReadToEnd();
-                }
-
-                // Rewind, so the core is not lost when it looks the body for the request
-                req.Body.Position = 0;
-
-
-                if(!string.IsNullOrEmpty(bodyStr)){
-                    var dic = bodyStr.Split('&').Select(x => x.Split('=')).Select(t =>
-                    new {
-                        Prop = t[0],
-                        Value = t[1]
-                    }).ToDictionary(x => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(x.Prop.ToLower()), x => x.Value);
-
-                var chartResource = dic.DictionaryToObject<ChartResource>();
-                
-                // if (!ModelState.IsValid)
-                // {
-                //     return BadRequest(ModelState);
-                // }
-
-                if(chart > 0) {
-                    var chartE = await _chartRepository.GetChart(chart);
-
-                    if(chartE == null) {
-                        return NotFound();
-                    }
+                        if (chartE == null)
+                        {
+                            return NotFound();
+                        }
 
                         _mapper.Map<ChartResource, Chart>(chartResource, chartE);
-                       await _uow.CompleteAsync();
-                       chartE = await _chartRepository.GetChart(chartE.Id);
-                       var dataUpdate = new { status = "ok", id = chartE.Id };
+                        await _uow.CompleteAsync();
+                        chartE = await _chartRepository.GetChart(chartE.Id);
+                        var dataUpdate = new {status = "ok", id = chartE.Id};
 
-                       return Json(dataUpdate);
-                } else {
-                var chartEntity = _mapper.Map<ChartResource, Chart>(chartResource);
-                chartEntity.LastUpdate = DateTime.Now;
+                        return Json(dataUpdate);
+                    }
+                    else
+                    {
+                        var chartEntity = _mapper.Map<ChartResource, Chart>(chartResource);
+                        chartEntity.LastUpdate = DateTime.Now;
 
-                _chartRepository.Add(chartEntity);
-                await _uow.CompleteAsync();
+                        _chartRepository.Add(chartEntity);
+                        await _uow.CompleteAsync();
 
-                chartEntity = await _chartRepository.GetChart(chartEntity.Id);
-                var result = _mapper.Map<Chart, ChartResource>(chartEntity);
+                        chartEntity = await _chartRepository.GetChart(chartEntity.Id);
+                        var result = _mapper.Map<Chart, ChartResource>(chartEntity);
 
-                var dataCreate = new { status = "ok", id = result.Id };
+                        var dataCreate = new {status = "ok", id = result.Id};
 
-                return Json(dataCreate);        
-                }
-
+                        return Json(dataCreate);
+                    }
                 }
 
                 return BadRequest();
-                
-
-                //{"status": "ok", "id": 67977}
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
                 throw;
             }
-            
+
+        }
+
+        private string GetBodyStr(out IQueryCollection queryStrings)
+        {
+            string bodyStr;
+            var req = HttpContext.Request;
+            queryStrings = Request.Query;
+            req.EnableRewind();
+
+            using (StreamReader reader
+                = new StreamReader(req.Body, Encoding.UTF8, true, 1024, true))
+            {
+                bodyStr = reader.ReadToEnd();
+            }
+
+            req.Body.Position = 0;
+            return bodyStr;
         }
     }
 }
