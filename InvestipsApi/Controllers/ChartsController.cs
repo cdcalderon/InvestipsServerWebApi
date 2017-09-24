@@ -18,7 +18,6 @@ using InvestipsApi.Helpers;
 
 namespace InvestipsApi.Controllers
 {
-   // [Produces("application/json")]
     [Route("/api/Charts")]
     public class ChartsController : Controller
     {
@@ -32,7 +31,6 @@ namespace InvestipsApi.Controllers
             _chartRepository = chartRepository;
             _uow = uow;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetCharts(string client, string user, int chart)
