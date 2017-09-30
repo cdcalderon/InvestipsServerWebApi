@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Investips.Core;
 using Investips.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +46,18 @@ namespace InvestipsApi
             // Add framework services.
             services.AddMvc();
 
+            // 1. Add Authentication Services
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://investips.auth0.com/";
+                options.Audience = "https://api.investips.com";
+            });
+
             services.AddCors(o => o.AddPolicy("InvestipsPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -72,6 +85,9 @@ namespace InvestipsApi
             //   var context = serviceScope.ServiceProvider.GetRequiredService<InvestipsDbContext>();
             //   context.Database.Migrate();
             // }
+
+            // 2. Enable authentication middleware
+            app.UseAuthentication();
 
             app.UseMvc();
         }
