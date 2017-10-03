@@ -11,9 +11,10 @@ using System;
 namespace Investips.Persistence.Migrations
 {
     [DbContext(typeof(InvestipsDbContext))]
-    partial class InvestipsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171003055338_AddUserRoleAndRelationship")]
+    partial class AddUserRoleAndRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,19 +119,6 @@ namespace Investips.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Investips.Core.Models.UserRole", b =>
-                {
-                    b.Property<int>("UserId");
-
-                    b.Property<int>("RoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRole");
-                });
-
             modelBuilder.Entity("Investips.Core.Models.WidgetShape", b =>
                 {
                     b.Property<int>("Id")
@@ -177,19 +165,6 @@ namespace Investips.Persistence.Migrations
                     b.HasOne("Investips.Core.Models.Security", "Security")
                         .WithMany()
                         .HasForeignKey("SecurityId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Investips.Core.Models.UserRole", b =>
-                {
-                    b.HasOne("Investips.Core.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Investips.Core.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
