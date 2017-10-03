@@ -79,12 +79,15 @@ namespace InvestipsApi
                 app.UseDeveloperExceptionPage();
             }
 
-
-            // using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            // {
-            //   var context = serviceScope.ServiceProvider.GetRequiredService<InvestipsDbContext>();
-            //   context.Database.Migrate();
-            // }
+            //if (env.IsProduction())
+            //{
+            //    using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            //    {
+            //        var context = serviceScope.ServiceProvider.GetRequiredService<InvestipsDbContext>();
+            //        context.Database.Migrate();
+            //    }
+            //}
+                
 
             // 2. Enable authentication middleware
             app.UseAuthentication();
