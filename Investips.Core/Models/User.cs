@@ -9,7 +9,8 @@ namespace Investips.Core.Models
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
+        public int TradingProfileId { get; set; }
+        public TradingProfile Profile { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }
