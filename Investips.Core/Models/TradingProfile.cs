@@ -9,6 +9,6 @@ namespace Investips.Core.Models
         public int Id { get; set; }
         public string Email { get; set; }
         public int TradingExperience { get; set; }
-
+        public DateTime LastUpdate { get; set; }
     }
 }
