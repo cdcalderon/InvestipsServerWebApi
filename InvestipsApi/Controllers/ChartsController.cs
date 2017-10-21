@@ -21,6 +21,7 @@ namespace InvestipsApi.Controllers
     [Route("/api/Charts")]
     public class ChartsController : Controller
     {
+        //Add Mapper 
         private readonly IMapper _mapper;
         private readonly IChartRepository _chartRepository;
         private readonly IUnitOfWork _uow;
