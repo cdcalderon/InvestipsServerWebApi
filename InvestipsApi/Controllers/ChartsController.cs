@@ -26,6 +26,8 @@ namespace InvestipsApi.Controllers
         private readonly IChartRepository _chartRepository;
         private readonly IUnitOfWork _uow;
 
+        private readonly String _flagger = "optional";
+
         public ChartsController(IMapper mapper, IChartRepository chartRepository, IUnitOfWork uow)
         {
             _mapper = mapper;
