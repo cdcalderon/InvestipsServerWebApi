@@ -11,9 +11,10 @@ using System;
 namespace Investips.Persistence.Migrations
 {
     [DbContext(typeof(InvestipsDbContext))]
-    partial class InvestipsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171018022252_AddUserTradingProfile")]
+    partial class AddUserTradingProfile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,8 +111,6 @@ namespace Investips.Persistence.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Email");
-
-                    b.Property<DateTime>("LastUpdate");
 
                     b.Property<int>("TradingExperience");
 

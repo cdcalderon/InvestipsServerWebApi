@@ -11,9 +11,10 @@ using System;
 namespace Investips.Persistence.Migrations
 {
     [DbContext(typeof(InvestipsDbContext))]
-    partial class InvestipsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171003055338_AddUserRoleAndRelationship")]
+    partial class AddUserRoleAndRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,11 +55,7 @@ namespace Investips.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<int>("UserId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Portfolios");
                 });
@@ -104,22 +101,6 @@ namespace Investips.Persistence.Migrations
                     b.ToTable("Securities");
                 });
 
-            modelBuilder.Entity("Investips.Core.Models.TradingProfile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Email");
-
-                    b.Property<DateTime>("LastUpdate");
-
-                    b.Property<int>("TradingExperience");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TradingProfile");
-                });
-
             modelBuilder.Entity("Investips.Core.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -127,30 +108,15 @@ namespace Investips.Persistence.Migrations
 
                     b.Property<DateTime>("CreatedDate");
 
+                    b.Property<string>("Email");
+
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
-                    b.Property<int>("TradingProfileId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TradingProfileId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Investips.Core.Models.UserRole", b =>
-                {
-                    b.Property<int>("UserId");
-
-                    b.Property<int>("RoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("Investips.Core.Models.WidgetShape", b =>
@@ -189,14 +155,6 @@ namespace Investips.Persistence.Migrations
                     b.ToTable("WidgetShapePoint");
                 });
 
-            modelBuilder.Entity("Investips.Core.Models.Portfolio", b =>
-                {
-                    b.HasOne("Investips.Core.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Investips.Core.Models.PortfolioSecurity", b =>
                 {
                     b.HasOne("Investips.Core.Models.Portfolio", "Portfolio")
@@ -207,27 +165,6 @@ namespace Investips.Persistence.Migrations
                     b.HasOne("Investips.Core.Models.Security", "Security")
                         .WithMany()
                         .HasForeignKey("SecurityId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Investips.Core.Models.User", b =>
-                {
-                    b.HasOne("Investips.Core.Models.TradingProfile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("TradingProfileId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Investips.Core.Models.UserRole", b =>
-                {
-                    b.HasOne("Investips.Core.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Investips.Core.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
