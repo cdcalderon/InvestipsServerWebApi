@@ -14,7 +14,7 @@ namespace InvestipsApi.Mapping
     public class MappingProfile : Profile
     {
         public MappingProfile()
-        {
+        {   //CreateMap<Target, Destination>()
             CreateMap<Portfolio, SavePortfolioResource>()
                 .ForMember(pr => pr.Securities, opt => opt.MapFrom(p => p.Securities
                     .Select(s => s.SecurityId)));
@@ -73,6 +73,18 @@ namespace InvestipsApi.Mapping
 
             CreateMap<ChartResource, Chart>()
                 .ForMember(s => s.Id, opt => opt.Ignore());
+
+            CreateMap<UserResource, User>()
+                .ForMember(u => u.Profile, opt => opt.MapFrom(ur => new
+                    TradingProfile
+                    {
+                        Email = ur.Email,
+                        TradingExperience = ur.YearsOfExperience,
+                        LastUpdate = DateTime.Now
+                    }
+                ));
+
+            CreateMap<User, UserResource>();
 
 
 
